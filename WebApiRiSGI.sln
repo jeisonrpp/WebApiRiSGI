@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiRiSGI", "WebApiRiSGI\WebApiRiSGI.csproj", "{428BF253-3232-47A0-B3D3-6F33B318BECC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{428BF253-3232-47A0-B3D3-6F33B318BECC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{428BF253-3232-47A0-B3D3-6F33B318BECC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{428BF253-3232-47A0-B3D3-6F33B318BECC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{428BF253-3232-47A0-B3D3-6F33B318BECC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {75741EF7-702E-46FD-8475-47B4F118A37D}
+	EndGlobalSection
+EndGlobal
