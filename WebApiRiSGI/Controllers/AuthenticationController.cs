@@ -5,6 +5,8 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Microsoft.Extensions.Configuration;
+using System;
 
 namespace WebApiRiSGI.Controllers
 {
@@ -13,24 +15,24 @@ namespace WebApiRiSGI.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly string secretKey;
-        public readonly SgiContext _dbcontext;
+        private readonly SgiContext _dbcontext;
 
-         public AuthenticationController(IConfiguration config)
+        public AuthenticationController(IConfiguration config, SgiContext dbcontext)
         {
             secretKey = config.GetSection("settings").GetSection("secretkey").ToString();
+            _dbcontext = dbcontext;
         }
-      
 
         [HttpPost]
         [Route("Authenticate")]
         public IActionResult Authenticate([FromBody] Usuarios request)
         {
+            // Retrieve the user from the database based on UserLogin
+            Usuarios user = _dbcontext.Usuarios.SingleOrDefault(u => u.UserLogin == request.UserLogin);
 
-            //Usuarios oUser = _dbcontext.Usuarios.Find(request.UserLogin);
-
-            if (request.UserLogin == "admin" && request.UserPass == "test")
+            if (user != null && user.UserPass == request.UserPass)
             {
-                var KeyBytes = Encoding.ASCII.GetBytes(secretKey);
+                var keyBytes = Encoding.ASCII.GetBytes(secretKey);
                 var claims = new ClaimsIdentity();
 
                 claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, request.UserLogin));
@@ -39,15 +41,15 @@ namespace WebApiRiSGI.Controllers
                 {
                     Subject = claims,
                     Expires = DateTime.UtcNow.AddMinutes(5),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(KeyBytes), SecurityAlgorithms.HmacSha256Signature)
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256Signature)
                 };
 
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var tokenConfig = tokenHandler.CreateToken(tokenDescriptor);
 
-                string createdtoken = tokenHandler.WriteToken(tokenConfig);
+                string createdToken = tokenHandler.WriteToken(tokenConfig);
 
-                return StatusCode(StatusCodes.Status200OK, new { token = createdtoken });
+                return StatusCode(StatusCodes.Status200OK, new { token = createdToken });
             }
             else
             {
