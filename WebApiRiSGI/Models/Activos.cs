@@ -13,11 +13,12 @@ public partial class Activos
 
     public string? Serial { get; set; }
 
-    public string? TipoActivo { get; set; }
+    public int TipoActivo { get; set; }
 
     public string? Descripcion { get; set; }
 
-    public string? MarcaActivo { get; set; }
+    public int MarcaActivo { get; set; }
 
-    public string? ModeloActivo { get; set; }
+    public int ModeloActivo { get; set; }
+    public DateTime FechaCompra { get; set; }
 }

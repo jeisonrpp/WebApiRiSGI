@@ -12,11 +12,11 @@ namespace WebApiRiSGI.Controllers
     [Route("api/[controller]")]
     [Authorize]
     [ApiController]
-    public class ActivesController : ControllerBase
+    public class SGIActivesController : ControllerBase
     {
         public readonly SgiContext _dbcontext;
 
-        public ActivesController(SgiContext _context) 
+        public SGIActivesController(SgiContext _context) 
         {
             _dbcontext = _context; 
         }

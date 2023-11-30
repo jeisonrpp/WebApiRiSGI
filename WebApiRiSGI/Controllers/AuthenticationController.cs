@@ -49,7 +49,7 @@ namespace WebApiRiSGI.Controllers
 
                 string createdToken = tokenHandler.WriteToken(tokenConfig);
 
-                return StatusCode(StatusCodes.Status200OK, new { token = createdToken });
+                return StatusCode(StatusCodes.Status200OK, new { bearer = createdToken });
             }
             else
             {

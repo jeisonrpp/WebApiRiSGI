@@ -60,20 +60,14 @@ public partial class SgiContext : DbContext
             entity.Property(e => e.Descripcion)
                 .HasMaxLength(500)
                 .IsUnicode(false);
-            entity.Property(e => e.MarcaActivo)
-                .HasMaxLength(20)
-                .IsUnicode(false);
-            entity.Property(e => e.ModeloActivo)
-                .HasMaxLength(20)
-                .IsUnicode(false);
+            entity.Property(e => e.MarcaActivo).HasColumnName("MarcaActivo");
+            entity.Property(e => e.ModeloActivo).HasColumnName("ModeloActivo");
             entity.Property(e => e.Serial)
                 .HasMaxLength(70)
                 .IsUnicode(false);
-            entity.Property(e => e.TipoActivo)
-                .HasMaxLength(30)
-                .IsUnicode(false);
+            entity.Property(e => e.TipoActivo).HasColumnName("TipoActivo");
+            entity.Property(e => e.FechaCompra).HasColumnType("datetime");
         });
-
         modelBuilder.Entity<Areas>(entity =>
         {
             entity.HasNoKey();
@@ -81,6 +75,9 @@ public partial class SgiContext : DbContext
             entity.Property(e => e.AreaId)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("AreaID");
+            entity.Property(e => e.AreaNombre)
+              .HasMaxLength(150)
+              .IsUnicode(false);
             entity.Property(e => e.DepartamentoId).HasColumnName("DepartamentoID");
         });
 
@@ -97,7 +94,7 @@ public partial class SgiContext : DbContext
             entity.HasNoKey();
 
             entity.Property(e => e.Departamento1)
-                .HasMaxLength(70)
+                .HasMaxLength(150)
                 .IsUnicode(false)
                 .HasColumnName("Departamento");
             entity.Property(e => e.DepartamentoId)
