@@ -9,4 +9,6 @@ public partial class Areas
     public string AreaNombre { get; set; }
 
     public int DepartamentoId { get; set; }
+
+    public string? AreaEncargado { get; set; }
 }

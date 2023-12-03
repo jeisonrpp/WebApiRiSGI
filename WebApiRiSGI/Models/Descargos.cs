@@ -7,6 +7,8 @@ public partial class Descargos
 {
     public int DescargoId { get; set; }
 
+    public string? Descargo { get; set; }
+
     public int? ActivoId { get; set; }
 
     public int? LocalidadId { get; set; }

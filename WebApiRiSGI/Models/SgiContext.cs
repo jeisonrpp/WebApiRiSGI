@@ -40,7 +40,10 @@ public partial class SgiContext : DbContext
     public virtual DbSet<RolesUsuarios> RolesUsuarios { get; set; }
 
     public virtual DbSet<Usuarios> Usuarios { get; set; }
-    public virtual DbSet<TipoActivo> TipoActivos { get; set; }
+    public virtual DbSet<TipoActivo> TipoActivo { get; set; }
+    public virtual DbSet<MovimientoView> Movimientosview { get; set; }
+    public virtual DbSet<DescargosView> DescargosView { get; set; }
+    public virtual DbSet<ActivosView> ActivosView { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     { }
@@ -66,7 +69,7 @@ public partial class SgiContext : DbContext
                 .HasMaxLength(70)
                 .IsUnicode(false);
             entity.Property(e => e.TipoActivo).HasColumnName("TipoActivo");
-            entity.Property(e => e.FechaCompra).HasColumnType("datetime");
+            entity.Property(e => e.FechaAdquisicion).HasColumnType("datetime");
         });
         modelBuilder.Entity<Areas>(entity =>
         {
@@ -79,6 +82,9 @@ public partial class SgiContext : DbContext
               .HasMaxLength(150)
               .IsUnicode(false);
             entity.Property(e => e.DepartamentoId).HasColumnName("DepartamentoID");
+            entity.Property(e => e.AreaEncargado)
+         .HasMaxLength(50)
+         .IsUnicode(false);
         });
 
         modelBuilder.Entity<Asignaciones>(entity =>
@@ -86,22 +92,36 @@ public partial class SgiContext : DbContext
             entity.HasKey(e => e.AsigId);
 
             entity.Property(e => e.ActivosId).HasColumnName("ActivosID");
-            entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.DomainUser)
+    .HasMaxLength(50)
+    .IsUnicode(false);
+            entity.Property(e => e.DisplayName)
+    .HasMaxLength(50)
+    .IsUnicode(false);
+            entity.Property(e => e.LocalidadId).HasColumnName("LocalidadId");
+            entity.Property(e => e.OrganoID).HasColumnName("OrganoID");
+            entity.Property(e => e.AreaId).HasColumnName("AreaId");
+
+            entity.Property(e => e.FechaAsignacion).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<Departamentos>(entity =>
         {
             entity.HasNoKey();
 
-            entity.Property(e => e.Departamento1)
+            entity.Property(e => e.DepartamentoNombre)
                 .HasMaxLength(150)
                 .IsUnicode(false)
-                .HasColumnName("Departamento");
+                .HasColumnName("DepartamentoNombre");
             entity.Property(e => e.DepartamentoId)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("DepartamentoID");
             entity.Property(e => e.LocalidadId).HasColumnName("LocalidadID");
             entity.Property(e => e.OrganoId).HasColumnName("OrganoID");
+            entity.Property(e => e.DepartamentoEncargado)
+             .HasMaxLength(50)
+             .IsUnicode(false)
+             .HasColumnName("DepartamentoEncargado");
         });
 
         modelBuilder.Entity<Descargos>(entity =>
@@ -109,6 +129,9 @@ public partial class SgiContext : DbContext
             entity.HasKey(e => e.DescargoId);
 
             entity.Property(e => e.DescargoId).HasColumnName("DescargoID");
+            entity.Property(e => e.Descargo)
+           .HasMaxLength(15)
+           .IsUnicode(false);
             entity.Property(e => e.ActivoId).HasColumnName("ActivoID");
             entity.Property(e => e.AreaId).HasColumnName("AreaID");
             entity.Property(e => e.Fecha).HasColumnType("datetime");
@@ -123,7 +146,7 @@ public partial class SgiContext : DbContext
 
         modelBuilder.Entity<Localidades>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => e.LocalidadId);
 
             entity.Property(e => e.Localidad)
                 .HasMaxLength(70)
@@ -135,7 +158,7 @@ public partial class SgiContext : DbContext
 
         modelBuilder.Entity<Marcas>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => e.MarcaId);
 
             entity.Property(e => e.Marca1)
                 .HasMaxLength(70)
@@ -148,7 +171,7 @@ public partial class SgiContext : DbContext
 
         modelBuilder.Entity<Modelos>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => e.ModeloId);
 
             entity.Property(e => e.MarcaId).HasColumnName("MarcaID");
             entity.Property(e => e.Modelo1)
@@ -165,13 +188,21 @@ public partial class SgiContext : DbContext
             entity.HasKey(e => e.MovimientoId);
 
             entity.Property(e => e.MovimientoId).HasColumnName("MovimientoID");
+            entity.Property(e => e.Movimiento)
+    .HasMaxLength(15)
+    .IsUnicode(false);
             entity.Property(e => e.ActivoId).HasColumnName("ActivoID");
-            entity.Property(e => e.AreaId).HasColumnName("AreaID");
+            entity.Property(e => e.LocalidadId_Destino).HasColumnName("LocalidadId_Destino");
+            entity.Property(e => e.AreaId_Destino).HasColumnName("AreaId_Destino");
             entity.Property(e => e.Fecha).HasColumnType("datetime");
-            entity.Property(e => e.LocalidadId).HasColumnName("LocalidadID");
+            entity.Property(e => e.LocalidadId_Remitente).HasColumnName("LocalidadId_Remitente");
+            entity.Property(e => e.AreaId_Remitente).HasColumnName("AreaId_Remitente");
             entity.Property(e => e.Observacion)
                 .HasMaxLength(200)
                 .IsUnicode(false);
+            entity.Property(e => e.MovimientoTipo)
+               .HasMaxLength(50)
+               .IsUnicode(false);
             entity.Property(e => e.UsuarioDestino)
                 .HasMaxLength(150)
                 .IsUnicode(false);
@@ -232,6 +263,12 @@ public partial class SgiContext : DbContext
                 .HasColumnName("TipoId");
             entity.Property(e => e.TipoNombre).HasColumnName("TipoNombre");
         });
+
+       
+        modelBuilder.Entity<ActivosView>().ToView(nameof(ActivosView)).HasNoKey(); 
+        modelBuilder.Entity<MovimientoView>().ToView(nameof(Movimientosview)).HasNoKey(); 
+        modelBuilder.Entity<DescargosView>().ToView(nameof(DescargosView)).HasNoKey(); 
+           
 
         OnModelCreatingPartial(modelBuilder);
     }

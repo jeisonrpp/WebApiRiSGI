@@ -7,6 +7,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using System;
+using WebApiRiSGI.Authentication;
+using Azure.Core;
+using static WebApiRiSGI.Authentication.AdAuthenticationService;
 
 namespace WebApiRiSGI.Controllers
 {
@@ -17,25 +20,31 @@ namespace WebApiRiSGI.Controllers
         private readonly string secretKey;
         private readonly SgiContext _dbcontext;
 
-        public AuthenticationController(IConfiguration config, SgiContext dbcontext)
+        public AuthenticationController(IConfiguration config, SgiContext dbcontext, AdAuthenticationService adAuthenticationService)
         {
             secretKey = config.GetSection("settings").GetSection("secretkey").ToString();
             _dbcontext = dbcontext;
+            _adAuthenticationService = adAuthenticationService;
         }
 
-        [HttpPost]
-        [Route("Authenticate")]
-        public IActionResult Authenticate([FromBody] Usuarios request)
-        {
-            // Retrieve the user from the database based on UserLogin
-            Usuarios user = _dbcontext.Usuarios.SingleOrDefault(u => u.UserLogin == request.UserLogin);
+        private readonly AdAuthenticationService _adAuthenticationService;
 
-            if (user != null && user.UserPass == request.UserPass)
+        [HttpPost("validate")]
+        public IActionResult ValidateCredentials([FromBody] CredentialsModel credentials)
+        {
+            string username = credentials.Username;
+            string password = credentials.Password;
+
+            Usuarios user = _dbcontext.Usuarios.SingleOrDefault(u => u.UserLogin == username);
+
+            bool isValid = _adAuthenticationService.ValidateCredentials(username, password);
+
+            if (isValid && user != null)
             {
                 var keyBytes = Encoding.ASCII.GetBytes(secretKey);
                 var claims = new ClaimsIdentity();
 
-                claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, request.UserLogin));
+                claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, username));
 
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
@@ -53,8 +62,16 @@ namespace WebApiRiSGI.Controllers
             }
             else
             {
-                return StatusCode(StatusCodes.Status401Unauthorized, new { token = "" });
+                return StatusCode(StatusCodes.Status401Unauthorized, new { bearer = "" });
             }
         }
+
+    public class CredentialsModel
+        {
+            public string Username { get; set; }
+            public string Password { get; set; }
+        }
     }
-}
+    }
+
+   

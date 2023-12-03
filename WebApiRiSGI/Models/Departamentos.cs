@@ -7,7 +7,8 @@ public partial class Departamentos
 {
     public int DepartamentoId { get; set; }
 
-    public string Departamento1 { get; set; } = null!;
+    public string DepartamentoNombre { get; set; } = null!;
+    public string? DepartamentoEncargado { get; set; } = null!;
 
     public int OrganoId { get; set; }
 
