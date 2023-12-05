@@ -12,18 +12,18 @@ namespace WebApiRiSGI.Controllers
     [Route("api/[controller]")]
   //  [Authorize]
     [ApiController]
-    public class SGIActivesController : ControllerBase
+    public class SGIAssetsController : ControllerBase
     {
         public readonly SgiContext _dbcontext;
 
-        public SGIActivesController(SgiContext _context) 
+        public SGIAssetsController(SgiContext _context) 
         {
             _dbcontext = _context; 
         }
     
         [HttpGet]
-        [Route("ListActives")]
-        public IActionResult ListActives()
+        [Route("ListAssets")]
+        public IActionResult ListAssets()
         {
             List<ActivosView> list = new List<ActivosView>();
 
@@ -31,11 +31,11 @@ namespace WebApiRiSGI.Controllers
             {
                 list = _dbcontext.ActivosView.ToList();
 
-                return StatusCode(StatusCodes.Status200OK, new { message = "ok", response = list });
+                return StatusCode(StatusCodes.Status200OK, new { response = list, message = "ok" });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status200OK, new { message = ex.Message, response = list });
+                return StatusCode(StatusCodes.Status200OK, new {  response = list, message = ex.Message });
             }
         }
 
@@ -76,8 +76,8 @@ namespace WebApiRiSGI.Controllers
         }
 
         [HttpGet]
-        [Route("ListActiveTypes")]
-        public IActionResult ListActiveTypes()
+        [Route("ListAssetsTypes")]
+        public IActionResult ListAssetsTypes()
         {
             List<TipoActivo> list = new List<TipoActivo>();
 
@@ -95,8 +95,8 @@ namespace WebApiRiSGI.Controllers
 
 
         [HttpGet]
-        [Route("GetActive")]
-        public IActionResult GetActives([FromQuery] string? ActivoPrincipal, [FromQuery] string? ActivoSecundario, [FromQuery] string? Serial, [FromQuery] string? Localidad, [FromQuery] string? Departamento, [FromQuery] string? Area)
+        [Route("GetAssets")]
+        public IActionResult GetAssets([FromQuery] string? ActivoPrincipal, [FromQuery] string? ActivoSecundario, [FromQuery] string? Serial, [FromQuery] string? Localidad, [FromQuery] string? Departamento, [FromQuery] string? Area)
         {
             IQueryable<ActivosView> query = _dbcontext.ActivosView.AsQueryable();
 
@@ -199,8 +199,8 @@ namespace WebApiRiSGI.Controllers
         }
 
         [HttpGet]
-        [Route("GetActivesType")]
-        public IActionResult GetActivesType([FromQuery] int? TipoID, [FromQuery] string? Tipo)
+        [Route("GetAssetsType")]
+        public IActionResult GetAssetsType([FromQuery] int? TipoID, [FromQuery] string? Tipo)
         {
             IQueryable<TipoActivo> query = _dbcontext.TipoActivo.AsQueryable();
 
@@ -227,8 +227,8 @@ namespace WebApiRiSGI.Controllers
         }
 
         [HttpPost]
-        [Route("SaveActive")]
-        public IActionResult Save([FromBody] Activos objeto)
+        [Route("SaveAssets")]
+        public IActionResult SaveAssets([FromBody] Activos objeto)
         {
             try
             {
@@ -328,8 +328,8 @@ namespace WebApiRiSGI.Controllers
         }
 
         [HttpPost]
-        [Route("SaveActiveType")]
-        public IActionResult SaveActiveType([FromBody] TipoActivo objeto)
+        [Route("SaveAssetsType")]
+        public IActionResult SaveAssetsType([FromBody] TipoActivo objeto)
         {
             try
             {
@@ -356,8 +356,8 @@ namespace WebApiRiSGI.Controllers
         }
 
         [HttpPut]
-        [Route("EditActive")]
-        public IActionResult Edit([FromBody] Activos objeto)
+        [Route("EditAssets")]
+        public IActionResult EditAssets([FromBody] Activos objeto)
         {
             Activos oActivo = null;
 
