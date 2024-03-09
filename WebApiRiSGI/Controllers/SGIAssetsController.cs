@@ -10,7 +10,7 @@ namespace WebApiRiSGI.Controllers
 {
     [EnableCors("CorsRules")]
     [Route("api/[controller]")]
-  //  [Authorize]
+    [Authorize]
     [ApiController]
     public class SGIAssetsController : ControllerBase
     {
@@ -72,6 +72,66 @@ namespace WebApiRiSGI.Controllers
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status200OK, new { message = ex.Message, response = list });
+            }
+        }
+
+        [HttpGet]
+        [Route("ListModelsbyBrands")]
+        public async Task<List<Modelos>> ListModelsbyBrands(int marcaid)
+        {
+            try
+            {
+                // Assuming there is a DbSet<Modelos> in your DbContext named "Modelos"
+                var modelosByMarca = await _dbcontext.Modelos
+                    .Where(m => m.MarcaId == marcaid)
+                    .ToListAsync();
+
+                return modelosByMarca;
+            }
+            catch (Exception ex)
+            {
+                // Log or handle unexpected exceptions
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("ListModelsbyBrandsandType")]
+        public async Task<List<Modelos>> ListModelsbyBrandsandType(int marcaid, int tipoid)
+        {
+            try
+            {
+                // Assuming there is a DbSet<Modelos> in your DbContext named "Modelos"
+                var modelosByMarcayTipo = await _dbcontext.Modelos
+                    .Where(m => m.MarcaId == marcaid && m.Tipoid == tipoid)
+                    .ToListAsync();
+
+                return modelosByMarcayTipo;
+            }
+            catch (Exception ex)
+            {
+                // Log or handle unexpected exceptions
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("ListModelsbyType")]
+        public async Task<List<Modelos>> ListModelsbyType(int tipoid)
+        {
+            try
+            {
+                // Assuming there is a DbSet<Modelos> in your DbContext named "Modelos"
+                var modelosByTipo = await _dbcontext.Modelos
+                    .Where(m => m.Tipoid == tipoid)
+                    .ToListAsync();
+
+                return modelosByTipo;
+            }
+            catch (Exception ex)
+            {
+                // Log or handle unexpected exceptions
+                throw;
             }
         }
 
@@ -247,7 +307,7 @@ namespace WebApiRiSGI.Controllers
                     {
                         ActivosId = objeto.ActivosId, 
                         DomainUser = "rmiranda",
-                        DisplayName = "Ramón Antonio Miranda Angeles",//que traiga por default nombre encargado de almacen
+                        DisplayName = "Ramón Antonio Miranda Angeles",//que traiga por default nombre encargado de almacen desde el appconfig
                         LocalidadId = 1,  
                         OrganoID = 3,
                         AreaId = 1,

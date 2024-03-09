@@ -11,7 +11,7 @@ namespace WebApiRiSGI.Controllers
 {
     [EnableCors("CorsRules")]
     [Route("api/[controller]")]
-  //  [Authorize]
+    [Authorize]
     [ApiController]
     public class UsersController : ControllerBase
     {

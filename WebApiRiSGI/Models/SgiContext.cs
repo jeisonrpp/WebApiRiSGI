@@ -178,6 +178,7 @@ public partial class SgiContext : DbContext
                 .HasMaxLength(70)
                 .IsUnicode(false)
                 .HasColumnName("Modelo");
+            entity.Property(e => e.Tipoid).HasColumnName("TipoId");
             entity.Property(e => e.ModeloId)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("ModeloID");

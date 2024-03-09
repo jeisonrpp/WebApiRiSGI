@@ -10,4 +10,6 @@ public partial class Modelos
     public int MarcaId { get; set; }
 
     public string Modelo1 { get; set; } = null!;
+
+    public int Tipoid { get; set; }
 }

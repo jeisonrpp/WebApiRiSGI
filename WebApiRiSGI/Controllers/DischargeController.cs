@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,7 +10,7 @@ namespace WebApiRiSGI.Controllers
 {
     [EnableCors("CorsRules")]
     [Route("api/[controller]")]
-    //  [Authorize]
+    [Authorize]
     [ApiController]
     public class DischargeController : ControllerBase
     {

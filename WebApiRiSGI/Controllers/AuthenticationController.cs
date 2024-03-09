@@ -49,7 +49,7 @@ namespace WebApiRiSGI.Controllers
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = claims,
-                    Expires = DateTime.UtcNow.AddMinutes(5),
+                    Expires = DateTime.UtcNow.AddHours(20),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256Signature)
                 };
 
@@ -57,8 +57,9 @@ namespace WebApiRiSGI.Controllers
                 var tokenConfig = tokenHandler.CreateToken(tokenDescriptor);
 
                 string createdToken = tokenHandler.WriteToken(tokenConfig);
+                var refreshToken = Guid.NewGuid().ToString();
 
-                return StatusCode(StatusCodes.Status200OK, new { bearer = createdToken });
+                return StatusCode(StatusCodes.Status200OK, new { bearer = createdToken, refresh_token = refreshToken });
             }
             else
             {
