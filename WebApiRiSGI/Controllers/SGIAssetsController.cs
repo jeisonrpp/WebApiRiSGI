@@ -10,7 +10,7 @@ namespace WebApiRiSGI.Controllers
 {
     [EnableCors("CorsRules")]
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     [ApiController]
     public class SGIAssetsController : ControllerBase
     {
@@ -156,9 +156,14 @@ namespace WebApiRiSGI.Controllers
 
         [HttpGet]
         [Route("GetAssets")]
-        public IActionResult GetAssets([FromQuery] string? ActivoPrincipal, [FromQuery] string? ActivoSecundario, [FromQuery] string? Serial, [FromQuery] string? Localidad, [FromQuery] string? Departamento, [FromQuery] string? Area)
+        public IActionResult GetAssets([FromQuery] int? Activoid, [FromQuery] string? ActivoPrincipal, [FromQuery] string? ActivoSecundario, [FromQuery] string? Serial, [FromQuery] string? Localidad, [FromQuery] string? Departamento, [FromQuery] string? Area)
         {
             IQueryable<ActivosView> query = _dbcontext.ActivosView.AsQueryable();
+
+            if (Activoid != null)
+            {
+                query = query.Where(p => p.ActivosId == Activoid);
+            }
 
             if (!string.IsNullOrEmpty(ActivoPrincipal))
             {

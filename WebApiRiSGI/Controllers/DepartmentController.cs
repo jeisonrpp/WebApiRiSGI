@@ -100,10 +100,9 @@ namespace WebApiRiSGI.Controllers
                 return BadRequest("Organo no encontrado");
             }
         }
-
         [HttpGet]
         [Route("GetDepartament")]
-        public IActionResult GetDepartament([FromQuery] int? DepartamentoID, [FromQuery] string? Departamento)
+        public IActionResult GetDepartament([FromQuery] int? DepartamentoID, [FromQuery] string? Departamento, [FromQuery] int? LocalidadID)
         {
             IQueryable<Departamentos> query = _dbcontext.Departamentos.AsQueryable();
 
@@ -117,11 +116,15 @@ namespace WebApiRiSGI.Controllers
                 query = query.Where(p => p.DepartamentoNombre == Departamento);
             }
 
-
-            Departamentos oDepartamento = query.FirstOrDefault();
-            if (oDepartamento != null)
+            if (LocalidadID != null)
             {
-                return StatusCode(StatusCodes.Status200OK, new { message = "ok", response = oDepartamento });
+                query = query.Where(p => p.LocalidadId == LocalidadID);
+            }
+
+            List<Departamentos> oDepartamentos = query.ToList();
+            if (oDepartamentos.Count > 0)
+            {
+                return StatusCode(StatusCodes.Status200OK, new { message = "ok", response = oDepartamentos });
             }
             else
             {
@@ -129,9 +132,10 @@ namespace WebApiRiSGI.Controllers
             }
         }
 
+
         [HttpGet]
         [Route("GetAreas")]
-        public IActionResult GetAreas([FromQuery] int? AreaID, [FromQuery] string? Area)
+        public IActionResult GetAreas([FromQuery] int? AreaID, [FromQuery] string? Area, [FromQuery] int? DepartamentoID)
         {
             IQueryable<Areas> query = _dbcontext.Areas.AsQueryable();
 
@@ -145,9 +149,13 @@ namespace WebApiRiSGI.Controllers
                 query = query.Where(p => p.AreaNombre == Area);
             }
 
+            if (DepartamentoID != null)
+            {
+                query = query.Where(p => p.DepartamentoId == DepartamentoID);
+            }
 
-            Areas oAreas = query.FirstOrDefault();
-            if (oAreas != null)
+            List<Areas> oAreas = query.ToList();
+            if (oAreas.Count > 0)
             {
                 return StatusCode(StatusCodes.Status200OK, new { message = "ok", response = oAreas });
             }

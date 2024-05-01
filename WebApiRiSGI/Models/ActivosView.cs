@@ -2,7 +2,7 @@
 {
     public partial class ActivosView
     {
-
+        public int ActivosId { get; set; }
         public string ActivoPrincipal { get; set; }
 
         public string? ActivoSecundario { get; set; }

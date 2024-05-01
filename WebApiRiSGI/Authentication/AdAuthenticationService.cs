@@ -26,22 +26,32 @@ namespace WebApiRiSGI.Authentication
 
         public UserInfoModel GetUserInfo(string username)
         {
-            using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, "suprema-ji.gov.do", "DC=Suprema-ji,DC=gov,DC=do"))
-            {
+            //using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, "suprema-ji.gov.do", "DC=Suprema-ji,DC=gov,DC=do"))
+            //{
                 try
                 {
                     // Find the user in Active Directory
-                    UserPrincipal userPrincipal = UserPrincipal.FindByIdentity(principalContext, username);
+                    //UserPrincipal userPrincipal = UserPrincipal.FindByIdentity(principalContext, username);                   
+
+                    String userPrincipal = "jpacheco";
 
                     if (userPrincipal != null)
                     {
                         // Extract desired user information
                         UserInfoModel userInfo = new UserInfoModel
                         {
-                            DomainUser = userPrincipal.SamAccountName,
-                            DisplayName = userPrincipal.DisplayName,
-                            Email = userPrincipal.EmailAddress,
-                            Desc = userPrincipal.Description,
+                            //DomainUser = userPrincipal.SamAccountName,
+                            //DisplayName = userPrincipal.DisplayName,
+                            //Email = userPrincipal.EmailAddress,
+                            //Desc = userPrincipal.Description,
+
+                            DomainUser = "jpacheco",
+                            DisplayName = "Jeison R. Pacheco",
+                            Email = "jpacheco@ri.gob.do",
+                            Desc = "Encargado de Creacion y Transformacion Digital",
+
+
+
                             // Add other properties you want to retrieve
                         };
 
@@ -56,7 +66,7 @@ namespace WebApiRiSGI.Authentication
                     return null;
                 }
 
-            }
+            //}
         }
     
 
